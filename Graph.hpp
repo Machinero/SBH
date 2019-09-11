@@ -72,6 +72,11 @@ namespace SBH
                 return target(index, m_graph);
             }
 
+            auto GetEdgesIterators()
+            {
+                return edges(m_graph);
+            }
+
             EdgeType & operator [] (ed const& index)
             {
                 return m_graph[index];
