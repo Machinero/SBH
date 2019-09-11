@@ -6,6 +6,7 @@
 #include "Edge.hpp"
 
 #include <vector>
+#include <atomic>
 
 namespace SBH
 {
@@ -17,12 +18,13 @@ namespace SBH
             explicit DnaGraph(Dna dna);
             DnaGraph() = default;
             DnaGraph::vd GetFirstOligonucleotide() const;
+            void EvaporateAllEdges(double evaporationRatio, double minimalPheromones, double smoothRatio);
             int GetOligonucleotideSize() const;
-        private:
-            std::map<std::string, int> ParseToOligonucleotides() const;
+
         private:
             int m_oligonucleotideSize;
             DnaGraph::vd m_firstOligoNucleotide;
+
     };      
 }
 
