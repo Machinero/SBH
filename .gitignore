@@ -12,3 +12,5 @@ _deps
 test
 .vscode
 googletest
+*.txt
+build
