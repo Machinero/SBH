@@ -1,13 +1,14 @@
 #include "Edge.hpp"
 
 #include <tuple>
+#include <cmath>
 
 namespace SBH 
 {
-    Edge::Edge(std::string_view name)
-        : m_name(std::move(name))
+    Edge::Edge(std::string_view name, std::size_t size)
+       : m_name(std::move(name))
     {
-        m_weight = m_name.size();
+        m_weight = size;
     }
 
     std::ostream& operator << (std::ostream& stream, Edge const& edge)
@@ -49,7 +50,7 @@ namespace SBH
 
     void Edge::SetPheromoneLevel(double pheromoneLevel)
     {
-        m_pheromoneLevel = pheromoneLevel;
+        m_pheromoneLevel += pheromoneLevel;
     }
 
     void Edge::SetName(std::string name)
@@ -61,4 +62,24 @@ namespace SBH
     {
         m_pheromoneLevel += pheromones;
     }
+
+    void Edge::Evaporate(double evaporationRatio)
+    {
+        m_pheromoneLevel *= evaporationRatio;
+    }
+
+    void Edge::Evaporate(double evaporationRatio, [[maybe_unused]]double minimalPheromones, [[maybe_unused]]double smoothRatio)
+    {
+        Evaporate(evaporationRatio);
+        // Smooth(minimalPheromones, smoothRatio);
+    }
+
+    [[maybe_unused]] void Edge::Smooth(double minimalPhermones, double smoothRatio)
+    {
+        m_pheromoneLevel = 
+           minimalPhermones * (1.0 + (std::log(m_pheromoneLevel/minimalPhermones) / std::log(smoothRatio)));
+    }
+
+    
+
 } // namespace SBH

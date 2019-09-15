@@ -11,7 +11,7 @@ namespace SBH
     class Edge 
     {
         public:
-            Edge(std::string_view name);
+            Edge(std::string_view name, std::size_t size);
             Edge() = default;
             Edge(Edge const&) = default;
             friend std::ostream& operator << (std::ostream& stream, Edge const& edge);
@@ -27,8 +27,12 @@ namespace SBH
             void SetName(std::string name);
 
             void UpdatePheromones(double pheromones);
+            void Evaporate(double evaporationRatio);
+            void Evaporate(double evaporationRatio, double minimalPheromones, double smoothRatio);
 
         private:
+            void Smooth(double minimalPheromones, double smoothRatio);
+
             uint16_t m_weight;
             double m_pheromoneLevel {settings::STARTING_PHEROMONES};
             std::string_view m_name;
