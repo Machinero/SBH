@@ -18,13 +18,13 @@ namespace helper
     }
 
     template <typename T>
-    T GenerateRandomNumber(int min, int max)
+    T GenerateRandomNumber(T min, T max)
     {
         thread_local std::random_device rd;
         thread_local std::mt19937 engine(rd() + std::hash<std::thread::id>{}(std::this_thread::get_id()));
         std::uniform_real_distribution<T> dist(min, max);
         return dist(engine);
-    } 
+    }
 }
 
 
