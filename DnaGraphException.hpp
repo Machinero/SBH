@@ -1,5 +1,5 @@
-#ifndef DNAGRAP_EXCEPTION_HPP
-#define DNAGRAP_EXCEPTION_HPP
+#ifndef DNAGRAPH_EXCEPTION_HPP
+#define DNAGRAPH_EXCEPTION_HPP
 
 #include <exception>
 #include <string>
