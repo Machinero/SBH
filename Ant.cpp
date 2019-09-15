@@ -18,6 +18,15 @@ namespace SBH
         m_distribution.resize(m_graph->GetAmountOfOutEdges(*maxElement));
     }
 
+    Ant::Ant(Ant const& ant)
+    {
+        this->m_distributionSize = ant.m_distributionSize;
+        this->m_distribution = ant.m_distribution;
+        this->m_visited = ant.m_visited;
+        this->m_dna = ant.m_dna;
+        this->m_graph = ant.m_graph;
+    }
+
     double Ant::ComputeNumerator(DnaGraph::ed const& edge)
     {
         auto pheromoneLevel = m_graph->GetEdge(edge).GetPheromoneLevel();
@@ -25,7 +34,7 @@ namespace SBH
         double numerator = std::pow(pheromoneLevel, settings::ALPHA) * 
             std::pow(weight, settings::BETA);
         return m_visited[m_graph->GetSourceVertex(edge)] ? 
-            numerator * settings::VISITED_MULTIPLY : numerator;
+                numerator * settings::VISITED_MULTIPLY : numerator;
     }
 
     void Ant::FillDistribution(DnaGraph::vd position)
@@ -36,10 +45,10 @@ namespace SBH
         m_distributionSize = m_graph->GetAmountOfOutEdges(position);
         for(auto const& edge : boost::make_iterator_range(edgesIterators))
         {
-            double lhs {rhs};
+            double lhs = rhs;
             rhs += ComputeNumerator(edge);
-            auto distElement = std::make_tuple(lhs, rhs, edge);
-            *distIt = distElement;
+            auto& [a, b, c] = *distIt;
+            a = lhs; b = rhs; c = edge;
             distIt++;
         }
 
@@ -48,6 +57,10 @@ namespace SBH
             auto& [first, second, edge] = m_distribution[i];
             first /= rhs;
             second /= rhs;
+        }
+        if(m_distributionSize == 0)
+        {
+            std::cout << "";
         }
     }
 
@@ -88,17 +101,32 @@ namespace SBH
     {
         auto position = m_graph->GetFirstOligonucleotide();
         std::string firstOligonucleotide = std::string((*m_graph)[position]);
-        dna.Append(std::move(firstOligonucleotide));
-        while (dna.GetDnaSize() < m_graph->GetDnaSize())
+        m_dna = std::move(firstOligonucleotide);
+        while (m_dna.size() < m_graph->GetDnaSize())
         {
             m_visited[position] = true;
             FillDistribution(position);
             auto edge {DrawNextEdge()};
             UpdatePheromones(edge);
-            dna.Append(std::move(std::string((*m_graph)[edge].GetName())));
+            std::string diff(m_graph->GetEdge(edge).GetName());
+            m_dna += std::move(diff);
+            m_count++;
             position = m_graph->GetTargetVertex(edge);
         }
-        std::cout << dna;
-        std::cout << "\n";
+    }
+
+    std::string Ant::GetGeneratedDna() const
+    {
+        return m_dna;
+    }
+
+    std::size_t Ant::GetCount() const
+    {
+        return m_count;
+    }
+
+    void Ant::ResetCounter()
+    {
+        m_count = 1;
     }
 }

@@ -12,16 +12,22 @@ namespace SBH
     {
         public:
             explicit Ant(std::shared_ptr<DnaGraph>& graph);
+            Ant(Ant const& ant);
+            Ant(Ant &&) = default;
             void FindPath();
+            std::string GetGeneratedDna() const;
+            std::size_t GetCount() const;
+            void ResetCounter();
+
         private:
             using Distribution = std::vector<std::tuple<double, double, DnaGraph::ed>>;
-            DnaGraph::ed m_lastVisitedVertex;
             std::size_t m_distributionSize;
             std::vector<bool> m_visited;
-            Dna dna;
+            std::string m_dna;
             Distribution m_distribution;
             std::shared_ptr<DnaGraph> m_graph;
             std::mutex m_mutex;
+            std::size_t m_count = 1;
 
             DnaGraph::vd NextVertex(DnaGraph::vd position);
             void UpdatePheromones(DnaGraph::ed edge);
