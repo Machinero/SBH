@@ -4,6 +4,7 @@
 #include <iostream>
 #include <optional>
 #include <array>
+#include <vector>
 
 
 namespace SBH 
@@ -23,11 +24,15 @@ namespace SBH
             std::string const& GetNucleotides() const;
             void Append(std::string oligonucleotide);
             std::size_t GetDnaSize() const;
+            void ClearNucleotides(); 
+            double Score(std::string const& generatedDna);
+            void LoadFromFile(std::string filePath);
 
         private:
             bool AreNucleotides(std::string const& text);
-            static constexpr std::array<char, 4> sm_nucleotides = {'A', 'C', 'G', 'T'}; 
+            std::vector<std::vector<int>> m_dp;
             std::string m_nucleotides {};
+            static constexpr std::array<char, 4> sm_nucleotides = {'A', 'C', 'G', 'T'}; 
     };
 }
 
