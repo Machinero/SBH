@@ -26,10 +26,10 @@ class Timer
 
         void DisplayElapsedTime()
         {
-            std::chrono::duration<double> duration = m_end - m_start;
+            auto duration = m_end - m_start;
             std::cout   
                     << "Elapsed " 
                     << std::chrono::duration_cast<T>(duration).count() 
-                    << std::endl;
+                    << '\n';
         }
 };
