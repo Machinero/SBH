@@ -18,7 +18,6 @@ set(Headers
     DnaGraph.hpp
     DnaException.hpp
     DnaGraphException.hpp
-    DnaComparator.hpp
     Edge.hpp
     Helper.hpp
     Ant.hpp
@@ -31,7 +30,6 @@ set(Sources
     main.cpp
     Dna.cpp
     DnaGraph.cpp
-    DnaComparator.cpp
     Edge.cpp
     Ant.cpp
     Aco.cpp
